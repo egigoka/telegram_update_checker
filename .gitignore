@@ -1,3 +1,8 @@
+# data
+secrets.py
+urls.json
+url_contents/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
