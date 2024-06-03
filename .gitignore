@@ -1,7 +1,9 @@
 # data
 secrets.py
 urls.json
+offset.json
 url_contents/
+.idea/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
