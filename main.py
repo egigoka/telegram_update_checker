@@ -14,7 +14,7 @@ except ImportError:
     print("Install dependency via 'pip install pytelegrambotapi'")
     import telebot
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 # Configuration
 CHECK_INTERVAL = 3600  # Check every hour
@@ -168,7 +168,7 @@ def message_receiver():
             else:
                 send_to_telegram(telegram_api,
                                  "Invalid command. "
-                                 "Please use /start, add <url>, remove <url> or print.")
+                                 "Please use /start, add <url>, remove <url>, print or check.")
 
 
 def main():
