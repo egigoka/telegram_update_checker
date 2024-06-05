@@ -57,8 +57,8 @@ def generate_diff(a, b):
     diff = difflib.unified_diff(
         formatted_a.splitlines(keepends=True),
         formatted_b.splitlines(keepends=True),
-        fromfile='a.html',
-        tofile='b.html',
+        fromfile='old_content',
+        tofile='new_content',
         lineterm='',
         n=0  # This reduces the context lines to zero, showing only the differences.
     )
