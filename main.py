@@ -187,7 +187,7 @@ def message_receiver():
             else:
                 send_to_telegram(telegram_api,
                                  "Invalid command. "
-                                 "Please use /start, add <url>, remove <url> or print.")
+                                 "Please use /start, add <url>, remove <url>, print or check.")
 
 
 def main():
