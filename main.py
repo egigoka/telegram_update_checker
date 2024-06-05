@@ -194,10 +194,9 @@ def main():
 
     threads = Threading()
 
-    # threads.add(telegrame.very_safe_start_bot, args=(message_receiver,), name="Receiver")
-    # threads.add(telegrame.very_safe_start_bot, args=(url_checker,), name="Sender")
-    message_receiver()
-
+    threads.add(telegrame.very_safe_start_bot, args=(message_receiver,), name="Receiver")
+    threads.add(telegrame.very_safe_start_bot, args=(url_checker,), name="Sender")
+    
     threads.start()
 
 
