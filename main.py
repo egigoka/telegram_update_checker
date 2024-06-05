@@ -4,6 +4,7 @@ import random
 import requests
 import difflib
 from datetime import datetime
+from bs4 import BeautifulSoup
 import telegrame
 from commands import JsonList, Json, Threading, newline
 from secrets import TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
@@ -14,7 +15,7 @@ except ImportError:
     print("Install dependency via 'pip install pytelegrambotapi'")
     import telebot
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 # Configuration
 CHECK_INTERVAL = 3600  # Check every hour
@@ -42,15 +43,33 @@ def save_content(filename, content):
         file.write(content)
 
 
-def generate_diff(old_content, new_content):
+def format_html(html):
+    """Formats HTML string using BeautifulSoup."""
+    soup = BeautifulSoup(html, 'html.parser')
+    return soup.prettify()
+
+
+def generate_diff(a, b):
+    """Generates a diff between two HTML strings, showing only the differences."""
+    formatted_a = format_html(a)
+    formatted_b = format_html(b)
+
     diff = difflib.unified_diff(
-        old_content.splitlines(),
-        new_content.splitlines(),
-        fromfile='old_content',
-        tofile='new_content',
-        lineterm=''
+        formatted_a.splitlines(keepends=True),
+        formatted_b.splitlines(keepends=True),
+        fromfile='a.html',
+        tofile='b.html',
+        lineterm='',
+        n=0  # This reduces the context lines to zero, showing only the differences.
     )
-    return '\n'.join(diff)
+
+    # Filter the diff to include only the changes
+    filtered_diff = []
+    for line in diff:
+        if line.startswith('@@') or line.startswith('+') or line.startswith('-'):
+            filtered_diff.append(line)
+
+    return ''.join(filtered_diff)
 
 
 def send_to_telegram(telegram_api, message):
@@ -175,8 +194,9 @@ def main():
 
     threads = Threading()
 
-    threads.add(telegrame.very_safe_start_bot, args=(message_receiver,), name="Receiver")
-    threads.add(telegrame.very_safe_start_bot, args=(url_checker,), name="Sender")
+    # threads.add(telegrame.very_safe_start_bot, args=(message_receiver,), name="Receiver")
+    # threads.add(telegrame.very_safe_start_bot, args=(url_checker,), name="Sender")
+    message_receiver()
 
     threads.start()
 
