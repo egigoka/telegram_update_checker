@@ -6,7 +6,7 @@ import difflib
 from datetime import datetime
 from bs4 import BeautifulSoup
 import telegrame
-from commands import JsonList, Json, Threading, newline
+from commands import JsonList, Json, Threading, Time, File, newline
 from secrets import TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 
 try:
@@ -46,19 +46,21 @@ def save_content(filename, content):
 def format_html(html):
     """Formats HTML string using BeautifulSoup."""
     soup = BeautifulSoup(html, 'html.parser')
-    return soup.prettify()
+    out = soup.prettify()
+    out = out.replace('\r\n', '\n')
+    return out
 
 
 def generate_diff(a, b):
     """Generates a diff between two HTML strings, showing only the differences."""
     formatted_a = format_html(a)
     formatted_b = format_html(b)
-
+    
     diff = difflib.unified_diff(
         formatted_a.splitlines(keepends=True),
         formatted_b.splitlines(keepends=True),
-        fromfile='a.html',
-        tofile='b.html',
+        fromfile='previous content',
+        tofile='new content',
         lineterm='',
         n=0  # This reduces the context lines to zero, showing only the differences.
     )
@@ -179,7 +181,7 @@ def message_receiver():
                 send_to_telegram(telegram_api, f"URL {url} not found.")
             elif message['message']['text'].lower().startswith('print'):
                 urls = get_urls()
-                send_to_telegram(telegram_api, f"URLs: {newline.join(urls)}")
+                send_to_telegram(telegram_api, f"URLs: {newline} {(newline*2).join(urls)}")
             elif message['message']['text'].lower().startswith('check'):
                 send_to_telegram(telegram_api, "Checking...")
                 url_checker(once=True)
